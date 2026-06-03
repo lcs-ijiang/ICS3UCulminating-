@@ -1,0 +1,123 @@
+//
+//  DiscoverDashboardView.swift
+//  ICS3UCulminating
+//
+//  Created by Student on 2/3/2026.
+//
+
+import SwiftUI
+
+struct DiscoverDashboardView: View {
+    
+    // MARK: - Stored properties
+    @State var viewModel = MainDashboardViewModel()
+    @State private var selectedTab = 0 // 0 for Discover, 1 for Matches
+    
+    // MARK: - Computed properties
+    var body: some View {
+        NavigationStack {
+            VStack(spacing: 0) {
+                // 1. Custom Header
+                HStack {
+                    Image(systemName: "person.2.fill")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 40, height: 40)
+                        .padding(8)
+                        .overlay(Rectangle().stroke(Color.purple.opacity(0.3), lineWidth: 2))
+                        .foregroundColor(.purple)
+                    
+                    VStack(alignment: .leading) {
+                        Text("Campus")
+                        Text("Connect")
+                    }
+                    .font(.headline)
+                    .foregroundColor(Color(red: 26/255, green: 35/255, blue: 126/255))
+                    
+                    Spacer()
+                    
+                    NavigationLink {
+                        AppPreferenceView()
+                    } label: {
+                        Image(systemName: "gearshape")
+                            .font(.title)
+                            .foregroundColor(.black)
+                    }
+                }
+                .padding()
+                .border(Color.black.opacity(0.1), width: 1)
+
+                // 2. Tab Selector (Discover vs Matches)
+                Picker("", selection: $selectedTab) {
+                    Text("Discover").tag(0)
+                    Text("Matches (\(viewModel.activities.count))").tag(1)
+                }
+                .pickerStyle(.segmented)
+                .padding()
+                .background(Color(white: 0.95))
+
+                // 3. Random Match Button
+                Button(action: {
+                    viewModel.isShowingRandomMatch = true
+                }) {
+                    HStack {
+                        Image(systemName: "shuffle")
+                        Text("Random Match")
+                    }
+                    .padding(.horizontal, 25)
+                    .padding(.vertical, 12)
+                    .background(Color.white)
+                    .foregroundColor(.black)
+                    .clipShape(Capsule())
+                    .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 3)
+                }
+                .padding(.top, 20)
+
+                // 4. Content List
+                List(viewModel.activities) { activity in
+                    VStack(alignment: .leading, spacing: 5) {
+                        Text(activity.description)
+                            .font(.headline)
+                        HStack {
+                            Text("By \(activity.creatorName)")
+                            Spacer()
+                            ForEach(activity.tags, id: \.self) { tag in
+                                Text(tag)
+                                    .font(.caption2)
+                                    .padding(4)
+                                    .background(Color.blue.opacity(0.1))
+                                    .cornerRadius(4)
+                            }
+                        }
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                    }
+                    .padding(.vertical, 4)
+                }
+                .listStyle(.plain)
+                
+                // 5. Add Button
+                Button(action: {
+                    viewModel.isShowingCreateSheet = true
+                }) {
+                    Image(systemName: "plus")
+                        .font(.system(size: 40, weight: .light))
+                        .foregroundColor(.gray)
+                        .frame(width: 80, height: 80)
+                        .overlay(Circle().stroke(Color.gray, lineWidth: 4))
+                }
+                .padding(.bottom, 20)
+            }
+            .sheet(isPresented: $viewModel.isShowingCreateSheet) {
+                CreateActivityView()
+            }
+            .sheet(isPresented: $viewModel.isShowingRandomMatch) {
+                RandomMatchView()
+            }
+        }
+    }
+}
+
+#Preview {
+    DiscoverDashboardView()
+}

@@ -10,26 +10,29 @@ import SwiftUI
 struct ActivitiesListView: View {
     
     // MARK: - Stored properties
-    // This will eventually be replaced by a ViewModel
-    let activities = exampleActivities
+    private var store = MockDataStore.shared
     
     // MARK: - Computed properties
     var body: some View {
-        NavigationStack {
-            List(activities) { activity in
-                VStack(alignment: .leading) {
-                    Text(activity.description)
-                        .font(.headline)
-                    Text("Posted by \(activity.poster.name)")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
+        List(store.activities) { activity in
+            VStack(alignment: .leading) {
+                Text(activity.description)
+                    .font(.headline)
+                HStack {
+                    Text("By \(activity.creatorName)")
+                    Spacer()
+                    Text("Slots: \(activity.maxSlots)")
                 }
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
             }
-            .navigationTitle("CampusConnect")
         }
+        .navigationTitle("All Activities")
     }
 }
 
 #Preview {
-    ActivitiesListView()
+    NavigationStack {
+        ActivitiesListView()
+    }
 }

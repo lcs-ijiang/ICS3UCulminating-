@@ -7,27 +7,13 @@
 
 import Foundation
 
-struct Activity: Identifiable {
+struct Activity: Identifiable, Hashable {
     
     // MARK: - Stored properties
     let id: UUID = UUID()
+    var creatorName: String
     var description: String
-    var date: Date
-    var poster: User
+    var tags: [String]
+    var maxSlots: Int
     
 }
-
-// MARK: - Examples
-let studySession = Activity(
-    description: "Go to library and study for Computer Science",
-    date: Date(),
-    poster: peter
-)
-
-let soccerMatch = Activity(
-    description: "Pickup soccer game at the field",
-    date: Date().addingTimeInterval(3600),
-    poster: gwen
-)
-
-let exampleActivities = [studySession, soccerMatch]

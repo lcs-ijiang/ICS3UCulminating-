@@ -7,30 +7,13 @@
 
 import Foundation
 
-struct User: Identifiable {
+struct User: Identifiable, Hashable {
     
     // MARK: - Stored properties
     let id: UUID = UUID()
-    var name: String
-    var phone: String
-    var studentID: String
+    var full_name: String
+    var phone_number: String
+    var student_id: String
     var interests: [String]
     
 }
-
-// MARK: - Examples
-let peter = User(
-    name: "Peter Parker",
-    phone: "416-555-0123",
-    studentID: "1001",
-    interests: ["Photography", "Science", "K-Pop"]
-)
-
-let gwen = User(
-    name: "Gwen Stacy",
-    phone: "416-555-0456",
-    studentID: "1002",
-    interests: ["Music", "Science", "Soccer"]
-)
-
-let exampleUsers = [peter, gwen]
