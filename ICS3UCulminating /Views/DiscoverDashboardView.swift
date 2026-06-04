@@ -37,7 +37,7 @@ struct DiscoverDashboardView: View {
                     Spacer()
                     
                     NavigationLink {
-                        AppPreferenceView()
+                        SettingsView()
                     } label: {
                         Image(systemName: "gearshape")
                             .font(.title)

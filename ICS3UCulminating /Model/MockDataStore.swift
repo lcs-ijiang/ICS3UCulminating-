@@ -8,6 +8,11 @@
 import Foundation
 import Observation
 
+enum AppAuthState {
+    case loggedOut
+    case loggedIn
+}
+
 @Observable
 class MockDataStore {
     
@@ -15,17 +20,18 @@ class MockDataStore {
     static let shared = MockDataStore()
     
     // MARK: - Stored properties
+    var authState: AppAuthState = .loggedOut
     var activities: [Activity] = []
     var currentUser: User
     
     // MARK: - Initializer
     private init() {
-        // Pre-filled current user
+        // Default empty user or guest
         self.currentUser = User(
-            full_name: "Yishan Jiang",
-            phone_number: "416-555-0123",
-            student_id: "2026001",
-            interests: ["Study", "Gaming", "K-Pop"]
+            full_name: "Guest",
+            phone_number: "",
+            student_id: "",
+            interests: []
         )
         
         // Initial mock activities

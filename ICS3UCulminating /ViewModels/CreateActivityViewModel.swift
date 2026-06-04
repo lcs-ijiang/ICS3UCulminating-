@@ -19,6 +19,8 @@ class CreateActivityViewModel {
     let availableTags = ["Study", "Gaming", "K-Pop", "Sports", "Music", "Social"]
     
     // MARK: - Functions
+    
+    /// This function adds or removes a tag from the activity being created.
     func toggleTag(_ tag: String) {
         if let index = selectedTags.firstIndex(of: tag) {
             selectedTags.remove(at: index)
@@ -27,9 +29,12 @@ class CreateActivityViewModel {
         }
     }
     
+    /// This function saves the new activity into the shared mock data list.
     func submitActivity() {
+        // Ensure there is a description before saving
         guard !description.isEmpty else { return }
         
+        // 1. Create a new Activity object using the current user's name and the form data
         let newActivity = Activity(
             creatorName: MockDataStore.shared.currentUser.full_name,
             description: description,
@@ -37,6 +42,8 @@ class CreateActivityViewModel {
             maxSlots: maxSlots
         )
         
+        // 2. Add this new activity to the global list in our MockDataStore
+        // Because MockDataStore is @Observable, all views watching this list will update instantly
         MockDataStore.shared.activities.append(newActivity)
     }
 }

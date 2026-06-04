@@ -1,6 +1,6 @@
 //
 //  AppPreference.swift
-//  Piper app exercise
+//  ICS3UCulminating
 //
 //  Created by Student on 2/3/2026.
 //
@@ -8,25 +8,18 @@
 import SwiftUI
 
 struct AppPreferenceView: View {
+    
+    // MARK: - Stored properties
     @State private var selectedLanguage = "English"
     @State private var matchRequests = true
     @State private var newPosts = true
     @State private var messages = true
 
+    // MARK: - Computed properties
     var body: some View {
         VStack(alignment: .leading, spacing: 30) {
-            // 1. Navigation Header
-            HStack {
-                Image(systemName: "chevron.left")
-                    .font(.title2)
-                    .fontWeight(.bold)
-                Text("App Preference")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-            }
-            .padding(.top, 20)
-
-            // 2. Language Selection Section
+            
+            // 1. Language Selection Section
             VStack(alignment: .leading, spacing: 20) {
                 Text("Language")
                     .font(.title2)
@@ -43,7 +36,7 @@ struct AppPreferenceView: View {
                 }
             }
 
-            // 3. Notification Settings Section
+            // 2. Notification Settings Section
             VStack(alignment: .leading, spacing: 25) {
                 Text("Notification")
                     .font(.title2)
@@ -59,17 +52,18 @@ struct AppPreferenceView: View {
                 Toggle("Messages", isOn: $messages)
                     .font(.headline)
             }
-            .tint(.blue) // Sets the toggle "on" color
+            .tint(.blue)
 
             Spacer()
         }
         .padding(30)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .navigationTitle("App Preferences")
+        .navigationBarTitleDisplayMode(.inline)
         .background(Color.white)
     }
 }
 
-// Reusable Language Button Component
+// MARK: - Reusable Language Button Component
 struct LanguageButton: View {
     let title: String
     let isSelected: Bool
@@ -88,5 +82,7 @@ struct LanguageButton: View {
 }
 
 #Preview {
-    AppPreferenceView()
+    NavigationStack {
+        AppPreferenceView()
+    }
 }
