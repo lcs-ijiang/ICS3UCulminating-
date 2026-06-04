@@ -7,10 +7,20 @@
 
 import Foundation
 import Supabase
-
-// IMPORTANT: Replace these with your actual Supabase project details
-// You can find these in your Supabase Project Settings > API
+ 
+let supabaseURL = URL(string: "https://wbrpsjwtskjtogwdrpub.supabase.co")!
+ 
 let supabase = SupabaseClient(
-    supabaseURL: URL(string: "https://your-project-url.supabase.co")!,
-    supabaseKey: "your-anon-key"
+    
+    supabaseURL: supabaseURL,
+    
+    supabaseKey: "sb_publishable_ocyXB2OBQZmJQVeZSFgPYw_au2EBT1n",
+    
+    options: SupabaseClientOptions(
+        auth: .init(
+            // Opt-in to the new behavior for session handling
+            emitLocalSessionAsInitialSession: true
+        )
+    )
+    
 )
