@@ -81,7 +81,7 @@ struct DiscoverDashboardView: View {
                         HStack {
                             Text("By \(activity.creatorName)")
                             Spacer()
-                            ForEach(activity.tags, id: \.self) { tag in
+                            ForEach(activity.interest_tags, id: \.self) { tag in
                                 Text(tag)
                                     .font(.caption2)
                                     .padding(4)

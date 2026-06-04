@@ -8,11 +8,7 @@
 import Foundation
 import Observation
 
-enum AppAuthState {
-    case loggedOut
-    case loggedIn
-}
-
+/// This class is temporarily used for UI prototyping until Supabase integration is finalized.
 @Observable
 class MockDataStore {
     
@@ -26,39 +22,30 @@ class MockDataStore {
     
     // MARK: - Initializer
     private init() {
-        // Default empty user or guest
+        // Default mock user
         self.currentUser = User(
-            full_name: "Guest",
-            phone_number: "",
-            student_id: "",
-            interests: []
+            full_name: "Yishan Jiang",
+            phone_number: "416-555-0123",
+            student_id: "2026001",
+            interests: ["Study", "Gaming", "K-Pop"]
         )
         
-        // Initial mock activities
+        // Mock activities with database-ready fields
+        let mockUserID = UUID()
         self.activities = [
             Activity(
+                creator_id: mockUserID,
                 creatorName: "Peter Parker",
                 description: "Library study session for the CS exam",
-                tags: ["Study", "CS"],
+                interest_tags: ["Study", "CS"],
                 maxSlots: 4
             ),
             Activity(
+                creator_id: UUID(),
                 creatorName: "Gwen Stacy",
                 description: "Gaming night - playing Minecraft together",
-                tags: ["Gaming", "Fun"],
+                interest_tags: ["Gaming", "Fun"],
                 maxSlots: 10
-            ),
-            Activity(
-                creatorName: "Miles Morales",
-                description: "K-Pop dance practice in the gym",
-                tags: ["K-Pop", "Dance"],
-                maxSlots: 8
-            ),
-            Activity(
-                creatorName: "Harry Osborn",
-                description: "Coffee and networking at the lounge",
-                tags: ["Social", "Networking"],
-                maxSlots: 5
             )
         ]
     }

@@ -31,7 +31,7 @@ class RandomMatchViewModel {
         // Filter the list of all activities
         let matches = store.activities.filter { activity in
             // For each activity, get its tags
-            let activityTags = Set(activity.tags)
+            let activityTags = Set(activity.interest_tags)
             
             // Check if there is any overlap between the user's interests and the activity's tags
             // 'isDisjoint' means they have NOTHING in common. '!isDisjoint' means they HAVE something in common.

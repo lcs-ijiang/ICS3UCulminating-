@@ -28,7 +28,7 @@ struct RandomMatchView: View {
                             .fontWeight(.bold)
                         
                         HStack {
-                            ForEach(match.tags, id: \.self) { tag in
+                            ForEach(match.interest_tags, id: \.self) { tag in
                                 Text("#\(tag)")
                                     .font(.caption)
                                     .padding(6)

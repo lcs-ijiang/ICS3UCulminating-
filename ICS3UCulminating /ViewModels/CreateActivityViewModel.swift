@@ -36,9 +36,10 @@ class CreateActivityViewModel {
         
         // 1. Create a new Activity object using the current user's name and the form data
         let newActivity = Activity(
+            creator_id: MockDataStore.shared.currentUser.id,
             creatorName: MockDataStore.shared.currentUser.full_name,
             description: description,
-            tags: selectedTags,
+            interest_tags: selectedTags,
             maxSlots: maxSlots
         )
         
