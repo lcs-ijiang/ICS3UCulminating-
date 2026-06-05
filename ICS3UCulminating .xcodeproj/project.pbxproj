@@ -33,6 +33,8 @@
 		3F7425162FD1BD81000B92D1 /* DataDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7425152FD1BD81000B92D1 /* DataDashboardView.swift */; };
 		3F74251D2FD2E4ED000B92D1 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 3F74251C2FD2E4ED000B92D1 /* Supabase */; };
 		3F7425212FD300C8000B92D1 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7425202FD300C8000B92D1 /* User.swift */; };
+		3F7425232FD3034B000B92D1 /* EditProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7425222FD3034B000B92D1 /* EditProfileViewModel.swift */; };
+		3F7425252FD30352000B92D1 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7425242FD30352000B92D1 /* EditProfileView.swift */; };
 		3FD4A9582FCDDC740079A8AC /* ICS3UCulminating App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD4A9572FCDDC740079A8AC /* ICS3UCulminating App.swift */; };
 		3FD4A95A2FCDDC740079A8AC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3FD4A9592FCDDC740079A8AC /* Assets.xcassets */; };
 		3FD4A9672FCDDC740079A8AC /* RELEASE.md in Resources */ = {isa = PBXBuildFile; fileRef = 3FD4A9662FCDDC740079A8AC /* RELEASE.md */; };
@@ -66,6 +68,8 @@
 		3F7425152FD1BD81000B92D1 /* DataDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataDashboardView.swift; sourceTree = "<group>"; };
 		3F74251E2FD2E9AF000B92D1 /* Supabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Supabase.swift; sourceTree = "<group>"; };
 		3F7425202FD300C8000B92D1 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		3F7425222FD3034B000B92D1 /* EditProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewModel.swift; sourceTree = "<group>"; };
+		3F7425242FD30352000B92D1 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		3FD4A9542FCDDC740079A8AC /* ICS3UCulminating .app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ICS3UCulminating .app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FD4A9572FCDDC740079A8AC /* ICS3UCulminating App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ICS3UCulminating App.swift"; sourceTree = "<group>"; };
 		3FD4A9592FCDDC740079A8AC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -161,6 +165,7 @@
 				3F7424FB2FD0523C000B92D1 /* SettingsViewModel.swift */,
 				3F7424FF2FD05458000B92D1 /* CreateAccountViewModel.swift */,
 				3F7425132FD1BD81000B92D1 /* DatabaseViewModel.swift */,
+				3F7425222FD3034B000B92D1 /* EditProfileViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -181,6 +186,7 @@
 				3F7425032FD05466000B92D1 /* ContentView.swift */,
 				3F7425052FD054A6000B92D1 /* Components */,
 				3F7425152FD1BD81000B92D1 /* DataDashboardView.swift */,
+				3F7425242FD30352000B92D1 /* EditProfileView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -276,6 +282,7 @@
 				3FD4A9582FCDDC740079A8AC /* ICS3UCulminating App.swift in Sources */,
 				3F7425042FD05466000B92D1 /* ContentView.swift in Sources */,
 				3F7424F62FD04A47000B92D1 /* RandomMatchView.swift in Sources */,
+				3F7425252FD30352000B92D1 /* EditProfileView.swift in Sources */,
 				3F7424EC2FD04A36000B92D1 /* MainDashboardViewModel.swift in Sources */,
 				3F7424DC2FCF5D75000B92D1 /* LoginView.swift in Sources */,
 				3F7425142FD1BD81000B92D1 /* DatabaseViewModel.swift in Sources */,
@@ -286,6 +293,7 @@
 				3F7425162FD1BD81000B92D1 /* DataDashboardView.swift in Sources */,
 				3F7425002FD05458000B92D1 /* CreateAccountViewModel.swift in Sources */,
 				3F7424F22FD04A36000B92D1 /* PlanActivityViewModel.swift in Sources */,
+				3F7425232FD3034B000B92D1 /* EditProfileViewModel.swift in Sources */,
 				3F7424D62FCDFA8A000B92D1 /* ActivitiesListView.swift in Sources */,
 				3F7424FC2FD0523C000B92D1 /* SettingsViewModel.swift in Sources */,
 			);

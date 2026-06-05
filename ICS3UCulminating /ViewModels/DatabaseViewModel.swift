@@ -64,8 +64,8 @@ class DatabaseViewModel {
                 .value
             print("FETCH SUCCESS: Got \(users.count) users from Supabase.")
         } catch {
-            self.errorMessage = "Profiles Sync Error: \(error.localizedDescription)"
-            print("FETCH ERROR (Profiles): \(error)")
+            self.errorMessage = "Users Sync Error: \(error.localizedDescription)"
+            print("FETCH ERROR (User): \(error)")
         }
         self.isLoading = false
     }
@@ -82,7 +82,7 @@ class DatabaseViewModel {
             print("FETCH SUCCESS: Got \(activities.count) activities from Supabase.")
         } catch {
             self.errorMessage = "Activities Sync Error: \(error.localizedDescription)"
-            print("FETCH ERROR (Activities): \(error)")
+            print("FETCH ERROR (Activity): \(error)")
         }
         self.isLoading = false
     }
@@ -99,13 +99,12 @@ class DatabaseViewModel {
             print("FETCH SUCCESS: Got \(interests.count) interests from Supabase.")
         } catch {
             self.errorMessage = "Interests Sync Error: \(error.localizedDescription)"
-            print("FETCH ERROR (Interests): \(error)")
+            print("FETCH ERROR (Interest): \(error)")
         }
         self.isLoading = false
     }
     
     func refreshCloudData() async {
-        print("DATABASE SYNC: Starting full cloud refresh...")
         await fetchUsers()
         await fetchActivities()
         await fetchInterests()

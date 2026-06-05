@@ -11,7 +11,8 @@ import SwiftUI
 struct ICS3UCulminating_App: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+//            ContentView()
+            ActivitiesListView()
         }
     }
 }

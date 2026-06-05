@@ -74,28 +74,22 @@ struct DiscoverDashboardView: View {
                 .padding(.top, 20)
 
                 // 4. Content List
-                if viewModel.isLoading {
+                if viewModel.isLoading && viewModel.activities.isEmpty {
                     ProgressView("Refreshing Feed...")
                         .padding()
                 }
                 
                 List(viewModel.activities) { activity in
                     VStack(alignment: .leading, spacing: 5) {
-                        Text(activity.description)
+                        Text(activity.title)
                             .font(.headline)
-                        HStack {
-                            Text("By \(activity.creatorName)")
-                            Spacer()
-                            ForEach(activity.interest_tags, id: \.self) { tag in
-                                Text(tag)
-                                    .font(.caption2)
-                                    .padding(4)
-                                    .background(Color.blue.opacity(0.1))
-                                    .cornerRadius(4)
-                            }
-                        }
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
+                        Text(activity.description ?? "No description")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                        
+                        Text("Posted by anonymous")
+                            .font(.caption2)
+                            .italic()
                     }
                     .padding(.vertical, 4)
                 }

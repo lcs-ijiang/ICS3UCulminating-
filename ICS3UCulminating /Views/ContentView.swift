@@ -10,19 +10,20 @@ import SwiftUI
 struct ContentView: View {
     
     // MARK: - Stored properties
-    // Watching the shared AuthManager for login changes
+    // We observe the AuthManager. When 'authState' changes, this view body re-runs automatically.
     var authManager = AuthManager.shared
     
     // MARK: - Computed properties
     var body: some View {
+        // This 'Group' acts as our main traffic controller
         Group {
-            // ROUTING LOGIC:
-            // If logged out, show Login screen. If logged in, show Dashboard.
-            switch authManager.authState {
-            case .loggedOut:
-                LoginView()
-            case .loggedIn:
+            if authManager.authState == .loggedIn {
+                // If logged in, show the main dashboard
+                // This replaces the entire screen so the user can't "go back" to login
                 DiscoverDashboardView()
+            } else {
+                // If logged out, show the login flow (which includes signup)
+                LoginView()
             }
         }
     }

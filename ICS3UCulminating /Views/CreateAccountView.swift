@@ -20,33 +20,34 @@ struct CreateAccountView: View {
                     Text("Join the Campus")
                         .font(.largeTitle)
                         .fontWeight(.bold)
-                    Text("Create an account to start matching with other students.")
+                    Text("Create an account to start matching.")
                         .foregroundColor(.secondary)
                 }
                 .padding(.horizontal)
                 
                 VStack(spacing: 20) {
-                    // Basic Info Section
-                    VStack(alignment: .leading, spacing: 15) {
-                        Text("Personal Information")
-                            .font(.headline)
-                        
-                        CustomTextField(placeholder: "Full Name", text: $viewModel.fullName)
-                        CustomTextField(placeholder: "Email Address", text: $viewModel.email)
-                        CustomTextField(placeholder: "Student ID", text: $viewModel.studentID)
-                        CustomTextField(placeholder: "Phone Number (Optional)", text: $viewModel.phoneNumber)
+                    Section {
+                        VStack(alignment: .leading, spacing: 15) {
+                            Text("Profile Details")
+                                .font(.headline)
+                            
+                            CustomTextField(placeholder: "Full Name", text: $viewModel.name)
+                            CustomTextField(placeholder: "Email Address", text: $viewModel.email)
+                            CustomTextField(placeholder: "Phone (Optional)", text: $viewModel.phoneNumber)
+                        }
                     }
                     
-                    // Interests Section
-                    VStack(alignment: .leading, spacing: 15) {
-                        Text("Choose Your Interests")
-                            .font(.headline)
-                        
-                        TagCloudView(
-                            tags: viewModel.availableInterests,
-                            selectedTags: viewModel.selectedInterests,
-                            onToggle: viewModel.toggleInterest
-                        )
+                    Section {
+                        VStack(alignment: .leading, spacing: 15) {
+                            Text("Interests")
+                                .font(.headline)
+                            
+                            TagCloudView(
+                                tags: viewModel.availableInterests,
+                                selectedTags: viewModel.selectedInterests,
+                                onToggle: viewModel.toggleInterest
+                            )
+                        }
                     }
                 }
                 .padding()
@@ -54,27 +55,35 @@ struct CreateAccountView: View {
                 .cornerRadius(20)
                 .padding(.horizontal)
                 
-                Button(action: {
-                    Task { await viewModel.createAccount() }
-                }) {
-                    Text("Create Account & Sign In")
-                        .font(.headline)
-                        .foregroundColor(.white)
+                if viewModel.isLoading {
+                    ProgressView("Creating Account...")
                         .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.blue)
-                        .cornerRadius(15)
+                } else {
+                    Button(action: {
+                        Task { await viewModel.createAccount() }
+                    }) {
+                        Text("Sign Up & Explore")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.blue)
+                            .cornerRadius(15)
+                    }
+                    .padding(.horizontal)
+                    .disabled(viewModel.name.isEmpty || viewModel.email.isEmpty)
                 }
-                .padding(.horizontal)
-                .padding(.top, 10)
-                .disabled(viewModel.fullName.isEmpty || viewModel.email.isEmpty)
                 
                 Spacer()
             }
             .padding(.vertical)
         }
         .navigationTitle("Create Account")
-        .navigationBarTitleDisplayMode(.inline)
+        .alert("Error", isPresented: $viewModel.isShowingError) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text(viewModel.errorMessage)
+        }
     }
 }
 

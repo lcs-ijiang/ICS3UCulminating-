@@ -14,17 +14,18 @@ import Supabase
 class CreateAccountViewModel {
     
     // MARK: - Stored properties
-    var fullName: String = ""
+    var name: String = ""
     var email: String = ""
-    var studentID: String = ""
     var phoneNumber: String = ""
     var selectedInterests: [String] = []
+    
+    var isLoading: Bool = false
+    var errorMessage: String = ""
+    var isShowingError: Bool = false
     
     let availableInterests = ["Study", "Sports", "Gaming", "Art", "Music", "K-Pop", "Cooking", "Coding"]
     
     // MARK: - Functions
-    
-    /// This function adds or removes an interest from the user's selected list.
     func toggleInterest(_ interest: String) {
         if let index = selectedInterests.firstIndex(of: interest) {
             selectedInterests.remove(at: index)
@@ -33,31 +34,42 @@ class CreateAccountViewModel {
         }
     }
     
-    /// This function handles the final account creation step by saving to Supabase.
     func createAccount() async {
-        guard !fullName.isEmpty, !email.isEmpty else { return }
+        guard !name.isEmpty, !email.isEmpty else {
+            self.errorMessage = "Name and Email are required."
+            self.isShowingError = true
+            return
+        }
         
-        // 1. Create a new User object
+        isLoading = true
+        let newUserID = UUID()
         let newUser = User(
-            id: UUID(),
-            full_name: fullName,
-            phone_number: phoneNumber,
-            student_id: studentID,
-            interests: selectedInterests
+            id: newUserID,
+            createdAt: Date(),
+            name: name,
+            email: email,
+            phone_number: phoneNumber.isEmpty ? nil : phoneNumber
         )
         
         do {
-            // 2. Save this new user to the 'user' table in Supabase
             try await supabase
                 .from("user")
                 .insert(newUser)
                 .execute()
             
-            // 3. Log in immediately
-            AuthManager.shared.login(user: newUser)
+            for interestName in selectedInterests {
+                let interestRecord = NewInterest(name: interestName, user_id: newUserID)
+                try await supabase
+                    .from("interest")
+                    .insert(interestRecord)
+                    .execute()
+            }
             
+            AuthManager.shared.login(user: newUser)
         } catch {
-            print("Error creating account: \(error.localizedDescription)")
+            self.errorMessage = "Could not create account: \(error.localizedDescription)"
+            self.isShowingError = true
         }
+        isLoading = false
     }
 }

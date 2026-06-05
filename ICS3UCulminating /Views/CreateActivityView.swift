@@ -18,8 +18,10 @@ struct CreateActivityView: View {
         NavigationStack {
             Form {
                 Section("Activity Details") {
+                    TextField("Title", text: $viewModel.title)
+                    
                     TextEditor(text: $viewModel.description)
-                        .frame(height: 80)
+                        .frame(height: 100)
                         .overlay(
                             Group {
                                 if viewModel.description.isEmpty {
@@ -32,30 +34,6 @@ struct CreateActivityView: View {
                             },
                             alignment: .topLeading
                         )
-                    
-                    TextField("Requirements (optional)", text: $viewModel.requirements)
-                }
-                
-                Section("Tags") {
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack {
-                            ForEach(viewModel.availableTags, id: \.self) { tag in
-                                Text(tag)
-                                    .padding(.horizontal, 12)
-                                    .padding(.vertical, 8)
-                                    .background(viewModel.selectedTags.contains(tag) ? Color.blue : Color.gray.opacity(0.2))
-                                    .foregroundColor(viewModel.selectedTags.contains(tag) ? .white : .black)
-                                    .clipShape(Capsule())
-                                    .onTapGesture {
-                                        viewModel.toggleTag(tag)
-                                    }
-                            }
-                        }
-                    }
-                }
-                
-                Section("Availability") {
-                    Stepper("Max Slots: \(viewModel.maxSlots)", value: $viewModel.maxSlots, in: 1...20)
                 }
             }
             .navigationTitle("New Activity")
@@ -73,7 +51,7 @@ struct CreateActivityView: View {
                             dismiss()
                         }
                     }
-                    .disabled(viewModel.description.isEmpty)
+                    .disabled(viewModel.title.isEmpty || viewModel.description.isEmpty)
                 }
             }
         }

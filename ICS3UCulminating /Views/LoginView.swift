@@ -19,7 +19,7 @@ struct LoginView: View {
                 // 1. App Title
                 Text("CampusConnect")
                     .font(.system(size: 34, weight: .bold))
-                    .foregroundColor(Color(red: 26/255, green: 35/255, blue: 126/255)) // Deep blue
+                    .foregroundColor(Color(red: 26/255, green: 35/255, blue: 126/255))
                     .padding(.top, 60)
 
                 // 2. Main Login Card
@@ -29,42 +29,38 @@ struct LoginView: View {
                             .font(.headline)
                             .fontWeight(.bold)
                         
-                        Text("Sign in to access your dashboard and meet someone who understands you better.")
+                        Text("Sign in with your email to access your dashboard.")
                             .font(.subheadline)
                             .foregroundColor(.gray)
                     }
 
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("Username")
+                        Text("Email Address")
                             .font(.subheadline)
                             .fontWeight(.medium)
                         
-                        // Username Field
-                        CustomTextField(placeholder: "e.g. Yishan", text: $viewModel.username)
-                        
-                        Text("Password")
-                            .font(.subheadline)
-                            .fontWeight(.medium)
-                        
-                        // Password Field
-                        CustomTextField(placeholder: "Any password for now", text: $viewModel.password, isSecure: true)
+                        CustomTextField(placeholder: "e.g. yishan@example.com", text: $viewModel.email)
                     }
                     .padding(.top, 10)
 
                     // 3. Sign In Button
-                    Button(action: {
-                        Task { await viewModel.signIn() }
-                    }) {
-                        Text("Sign In")
-                            .font(.headline)
-                            .foregroundColor(.white)
+                    if viewModel.isLoading {
+                        ProgressView()
                             .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color.blue.opacity(0.8))
-                            .cornerRadius(30)
+                    } else {
+                        Button(action: {
+                            Task { await viewModel.signIn() }
+                        }) {
+                            Text("Sign In")
+                                .font(.headline)
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(Color.blue.opacity(0.8))
+                                .cornerRadius(30)
+                        }
                     }
-                    .padding(.top, 20)
-
+                    
                     // 4. Create Account Section
                     VStack(spacing: 20) {
                         Text("Don't have an account?")
@@ -83,7 +79,7 @@ struct LoginView: View {
                     .padding(.top, 10)
                 }
                 .padding(30)
-                .background(Color(white: 0.98)) // Very light gray card background
+                .background(Color(white: 0.98))
                 .cornerRadius(40)
                 .padding(.horizontal, 20)
 

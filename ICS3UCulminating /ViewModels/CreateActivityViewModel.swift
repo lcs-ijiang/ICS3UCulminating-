@@ -14,39 +14,25 @@ import Supabase
 class CreateActivityViewModel {
     
     // MARK: - Stored properties
+    var title: String = ""
     var description: String = ""
-    var requirements: String = ""
-    var selectedTags: [String] = []
-    var maxSlots: Int = 2
-    
-    let availableTags = ["Study", "Gaming", "K-Pop", "Sports", "Music", "Social"]
+    var isLoading: Bool = false
     
     // MARK: - Functions
     
-    func toggleTag(_ tag: String) {
-        if let index = selectedTags.firstIndex(of: tag) {
-            selectedTags.remove(at: index)
-        } else {
-            selectedTags.append(tag)
-        }
-    }
-    
     /// This function saves the new activity into the Supabase database.
     func submitActivity() async {
-        guard !description.isEmpty, let currentUser = AuthManager.shared.currentUser else { return }
+        guard !title.isEmpty, !description.isEmpty, let currentUser = AuthManager.shared.currentUser else { return }
         
-        // 1. Create a new Activity object
-        let newActivity = Activity(
-            id: UUID(),
-            creator_id: currentUser.id,
-            creatorName: currentUser.full_name,
+        // 1. Create a NEW Activity object (without an ID, Supabase will generate one)
+        let newActivity = NewActivity(
+            title: title,
             description: description,
-            requirements: requirements,
-            interest_tags: selectedTags,
-            maxSlots: maxSlots
+            creator_id: currentUser.id
         )
         
         do {
+            isLoading = true
             // 2. Insert into the 'activity' table
             try await supabase
                 .from("activity")
@@ -58,5 +44,6 @@ class CreateActivityViewModel {
         } catch {
             print("Error posting activity: \(error.localizedDescription)")
         }
+        isLoading = false
     }
 }

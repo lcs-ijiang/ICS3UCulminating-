@@ -2,7 +2,7 @@
 //  PlanActivityViewModel.swift
 //  ICS3UCulminating
 //
-//  Created by Gemini CLI on 1/6/2026.
+//  Created by Student on 1/6/2026.
 //
 
 import Foundation
@@ -21,13 +21,9 @@ class PlanActivityViewModel {
     var isLoading: Bool = false
     
     // MARK: - Functions
-    
-    /// This function fetches the most recent activities from the cloud.
     func fetchRecentActivities() async {
         isLoading = true
-        print("PLAN VIEW: Fetching recent activities from Supabase...")
         do {
-            // DIRECT CLOUD QUERY
             let all: [Activity] = try await supabase
                 .from("activity")
                 .select()
@@ -39,7 +35,6 @@ class PlanActivityViewModel {
             } else {
                 self.recentActivities = all.reversed()
             }
-            print("PLAN VIEW SUCCESS: Loaded \(recentActivities.count) recent items.")
         } catch {
             print("PLAN VIEW ERROR: \(error.localizedDescription)")
         }

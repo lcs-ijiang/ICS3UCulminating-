@@ -26,28 +26,20 @@ struct RandomMatchView: View {
                             .font(.headline)
                             .foregroundColor(.blue)
                         
-                        Text(match.description)
+                        Text(match.title)
                             .font(.title2)
                             .fontWeight(.bold)
                         
-                        HStack {
-                            ForEach(match.interest_tags, id: \.self) { tag in
-                                Text("#\(tag)")
-                                    .font(.caption)
-                                    .padding(6)
-                                    .background(Color.blue.opacity(0.1))
-                                    .cornerRadius(5)
-                            }
-                        }
+                        Text(match.description ?? "No description provided.")
+                            .font(.body)
                         
                         Divider()
                         
-                        Text("Posted by \(match.creatorName)")
-                            .font(.subheadline)
-                        
-                        Text("Available slots: \(match.maxSlots)")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
+                        if let creatorId = match.creator_id {
+                            Text("Creator ID: \(creatorId.uuidString.prefix(8))...")
+                                .font(.caption2)
+                                .foregroundColor(.secondary)
+                        }
                     }
                     .padding(25)
                     .background(Color.white)
@@ -77,7 +69,7 @@ struct RandomMatchView: View {
                             .font(.title2)
                             .fontWeight(.bold)
                         
-                        Text("Try adding more interests to your profile!")
+                        Text("Try adding more activities to the campus!")
                             .foregroundColor(.secondary)
                         
                         Button("Refresh") {

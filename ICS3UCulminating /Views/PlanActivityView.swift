@@ -94,7 +94,7 @@ struct ActivityRow: View {
     
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
-            Text(String(activity.creatorName.prefix(1)))
+            Text("A")
                 .font(.title2)
                 .fontWeight(.bold)
                 .frame(width: 50, height: 50)
@@ -102,12 +102,12 @@ struct ActivityRow: View {
                 .cornerRadius(10)
 
             VStack(alignment: .leading, spacing: 2) {
-                Text(activity.creatorName)
+                Text(activity.title)
                     .fontWeight(.bold)
                 Text("wants to...")
                     .font(.caption)
                     .foregroundColor(.gray)
-                Text(activity.description)
+                Text(activity.description ?? "No description")
                     .font(.subheadline)
                     .padding(.top, 2)
             }

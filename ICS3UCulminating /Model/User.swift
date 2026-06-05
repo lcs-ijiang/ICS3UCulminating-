@@ -8,34 +8,35 @@
 import Foundation
 
 /// This model represents a user record stored in the 'user' table on Supabase.
-/// We use Codable to automatically map JSON columns to these Swift properties.
+/// Fix: Made properties optional to prevent "data missing" errors if columns are null.
 struct User: Identifiable, Codable, Hashable {
     
     // MARK: - Stored properties
     let id: UUID
-    var full_name: String
-    var phone_number: String
-    var student_id: String
-    var interests: [String]
+    var createdAt: Date? // Changed to Optional
+    var name: String
+    var email: String? // Changed to Optional
+    var phone_number: String?
     
     // MARK: - Initializer
-    
-    /// Creates a new User instance.
-    /// - Parameters:
-    ///   - id: The unique UUID for this user.
-    ///   - full_name: The student's full name.
-    ///   - phone_number: Their contact number.
-    ///   - student_id: Their unique school ID number.
-    ///   - interests: A list of things they like to do.
     init(id: UUID = UUID(), 
-         full_name: String, 
-         phone_number: String, 
-         student_id: String, 
-         interests: [String]) {
+         createdAt: Date? = nil, 
+         name: String, 
+         email: String? = nil, 
+         phone_number: String? = nil) {
         self.id = id
-        self.full_name = full_name
+        self.createdAt = createdAt
+        self.name = name
+        self.email = email
         self.phone_number = phone_number
-        self.student_id = student_id
-        self.interests = interests
+    }
+    
+    // MARK: - Coding Keys
+    enum CodingKeys: String, CodingKey {
+        case id
+        case createdAt = "created_at"
+        case name
+        case email
+        case phone_number
     }
 }

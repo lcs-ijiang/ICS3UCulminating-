@@ -25,20 +25,26 @@ class ActivityService {
     }
     
     /// Fetches activities that match the current user's interests.
-    /// This is the "Matching Algorithm" in action.
     func fetchMatchingActivities(for user: User) async throws -> [Activity] {
-        // The 'cs' filter in Supabase checks if an array 'contains' values
-        // Here we check if any of the activity's interest_tags are in the user's interests
-        let activities: [Activity] = try await supabase
-            .from("activity")
+        // 1. Fetch all interests for this user from the 'interest' table
+        let userInterests: [Interest] = try await supabase
+            .from("interest")
             .select()
-            .contains("interest_tags", value: user.interests)
-            .eq("status", value: "Open")
+            .eq("user_id", value: user.id)
             .execute()
             .value
         
-        // Filter out the user's own posts
-        return activities.filter { $0.creator_id != user.id }
+        let interestNames = userInterests.map { $0.name }
+        
+        // 2. Fetch all activities
+        let allActivities: [Activity] = try await fetchActivities()
+        
+        // 3. Match locally (since Supabase doesn't support 'contains' on simple text descriptions easily without array columns)
+        return allActivities.filter { activity in
+            // Basic matching logic: check if any interest name is mentioned in the activity title or description
+            let content = (activity.title + activity.description).lowercased()
+            return interestNames.contains { interest in content.contains(interest.lowercased()) }
+        }
     }
     
     /// Posts a new activity to the database.
