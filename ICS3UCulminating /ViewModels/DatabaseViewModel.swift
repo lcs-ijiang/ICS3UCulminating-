@@ -62,10 +62,11 @@ class DatabaseViewModel {
                 .select()
                 .execute()
                 .value
-            print("FETCH SUCCESS: Got \(users.count) users from Supabase.")
+            print("DATABASE: Successfully fetched users.")
+        } catch let error as DecodingError {
+            handleDecodingError(error, for: "user")
         } catch {
-            self.errorMessage = "Users Sync Error: \(error.localizedDescription)"
-            print("FETCH ERROR (User): \(error)")
+            self.errorMessage = "Cloud Sync Error (User): \(error.localizedDescription)"
         }
         self.isLoading = false
     }
@@ -79,10 +80,11 @@ class DatabaseViewModel {
                 .select()
                 .execute()
                 .value
-            print("FETCH SUCCESS: Got \(activities.count) activities from Supabase.")
+            print("DATABASE: Successfully fetched activities.")
+        } catch let error as DecodingError {
+            handleDecodingError(error, for: "activity")
         } catch {
-            self.errorMessage = "Activities Sync Error: \(error.localizedDescription)"
-            print("FETCH ERROR (Activity): \(error)")
+            self.errorMessage = "Cloud Sync Error (Activity): \(error.localizedDescription)"
         }
         self.isLoading = false
     }
@@ -96,10 +98,11 @@ class DatabaseViewModel {
                 .select()
                 .execute()
                 .value
-            print("FETCH SUCCESS: Got \(interests.count) interests from Supabase.")
+            print("DATABASE: Successfully fetched interests.")
+        } catch let error as DecodingError {
+            handleDecodingError(error, for: "interest")
         } catch {
-            self.errorMessage = "Interests Sync Error: \(error.localizedDescription)"
-            print("FETCH ERROR (Interest): \(error)")
+            self.errorMessage = "Cloud Sync Error (Interest): \(error.localizedDescription)"
         }
         self.isLoading = false
     }
@@ -108,5 +111,27 @@ class DatabaseViewModel {
         await fetchUsers()
         await fetchActivities()
         await fetchInterests()
+    }
+    
+    // MARK: - Helper for Detailed DecodingError Logging
+    private func handleDecodingError(_ error: DecodingError, for table: String) {
+        var message = "Decoding Error in '\(table)' table: "
+        
+        switch error {
+        case .typeMismatch(let type, let context):
+            message += "Type mismatch for key '\(context.codingPath.last?.stringValue ?? "unknown")'. Expected \(type)."
+        case .valueNotFound(let type, let context):
+            message += "Value not found for key '\(context.codingPath.last?.stringValue ?? "unknown")' of type \(type)."
+        case .keyNotFound(let key, _):
+            message += "Key '\(key.stringValue)' not found in database record."
+        case .dataCorrupted(let context):
+            message += "Data corrupted at '\(context.codingPath.last?.stringValue ?? "unknown")'."
+        @unknown default:
+            message += "Unknown decoding error."
+        }
+        
+        self.errorMessage = message
+        print("❌ \(message)")
+        print("Detailed Context: \(error)")
     }
 }

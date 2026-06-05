@@ -102,12 +102,12 @@ struct ActivityRow: View {
                 .cornerRadius(10)
 
             VStack(alignment: .leading, spacing: 2) {
-                Text(activity.title)
+                Text(activity.description.prefix(20)) // Use description since title was removed
                     .fontWeight(.bold)
                 Text("wants to...")
                     .font(.caption)
                     .foregroundColor(.gray)
-                Text(activity.description ?? "No description")
+                Text(activity.description)
                     .font(.subheadline)
                     .padding(.top, 2)
             }

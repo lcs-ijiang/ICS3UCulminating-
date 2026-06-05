@@ -47,7 +47,7 @@ struct DiscoverDashboardView: View {
                 .padding()
                 .border(Color.black.opacity(0.1), width: 1)
 
-                // 2. Tab Selector (Discover vs Matches)
+                // 2. Tab Selector
                 Picker("", selection: $selectedTab) {
                     Text("Discover").tag(0)
                     Text("Matches (\(viewModel.activities.count))").tag(1)
@@ -81,15 +81,15 @@ struct DiscoverDashboardView: View {
                 
                 List(viewModel.activities) { activity in
                     VStack(alignment: .leading, spacing: 5) {
-                        Text(activity.title)
+                        Text(activity.description)
                             .font(.headline)
-                        Text(activity.description ?? "No description")
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                        
-                        Text("Posted by anonymous")
-                            .font(.caption2)
-                            .italic()
+                        HStack {
+                            Text(activity.community)
+                            Spacer()
+                            Text("Participants: \(activity.currentParticipants)")
+                        }
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
                     }
                     .padding(.vertical, 4)
                 }

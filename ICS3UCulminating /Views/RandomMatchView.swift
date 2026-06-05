@@ -26,12 +26,18 @@ struct RandomMatchView: View {
                             .font(.headline)
                             .foregroundColor(.blue)
                         
-                        Text(match.title)
+                        Text(match.description)
                             .font(.title2)
                             .fontWeight(.bold)
                         
-                        Text(match.description ?? "No description provided.")
-                            .font(.body)
+                        HStack {
+                            Text("Community: \(match.community)")
+                                .font(.subheadline)
+                            Spacer()
+                            Text("ID: \(match.id)")
+                                .font(.caption2)
+                                .monospaced()
+                        }
                         
                         Divider()
                         

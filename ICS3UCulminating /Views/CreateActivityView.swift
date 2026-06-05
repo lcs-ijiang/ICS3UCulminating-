@@ -18,8 +18,6 @@ struct CreateActivityView: View {
         NavigationStack {
             Form {
                 Section("Activity Details") {
-                    TextField("Title", text: $viewModel.title)
-                    
                     TextEditor(text: $viewModel.description)
                         .frame(height: 100)
                         .overlay(
@@ -34,6 +32,10 @@ struct CreateActivityView: View {
                             },
                             alignment: .topLeading
                         )
+                }
+                
+                Section("Community") {
+                    TextField("Community Name", text: $viewModel.community)
                 }
             }
             .navigationTitle("New Activity")
@@ -51,7 +53,7 @@ struct CreateActivityView: View {
                             dismiss()
                         }
                     }
-                    .disabled(viewModel.title.isEmpty || viewModel.description.isEmpty)
+                    .disabled(viewModel.description.isEmpty)
                 }
             }
         }

@@ -22,17 +22,17 @@ struct ActivitiesListView: View {
             } else {
                 List(activities) { activity in
                     VStack(alignment: .leading) {
-                        Text(activity.title)
+                        Text(activity.description)
                             .font(.headline)
-                        Text(activity.description ?? "No description")
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                        
-                        if let creatorId = activity.creator_id {
-                            Text("Creator ID: \(creatorId.uuidString.prefix(8))...")
-                                .font(.caption2)
-                                .monospaced()
+                        HStack {
+                            Text(activity.community)
+                            Spacer()
+                            if let max = activity.max {
+                                Text("Max: \(max)")
+                            }
                         }
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
                     }
                 }
             }
@@ -53,7 +53,7 @@ struct ActivitiesListView: View {
                 .value
             self.activities = fetched.reversed()
         } catch {
-            print("Error fetching all: \(error)")
+            print("Error fetching all: \(error.localizedDescription)")
         }
         isLoading = false
     }

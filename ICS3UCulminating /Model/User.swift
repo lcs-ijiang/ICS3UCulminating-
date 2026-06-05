@@ -7,36 +7,39 @@
 
 import Foundation
 
-/// This model represents a user record stored in the 'user' table on Supabase.
-/// Fix: Made properties optional to prevent "data missing" errors if columns are null.
+/// Strict model for the "user" table.
 struct User: Identifiable, Codable, Hashable {
     
     // MARK: - Stored properties
     let id: UUID
-    var createdAt: Date? // Changed to Optional
-    var name: String
-    var email: String? // Changed to Optional
-    var phone_number: String?
+    var fullName: String
+    var email: String
+    var phoneNumber: String?
+    var studentId: String
+    var community: String
     
     // MARK: - Initializer
     init(id: UUID = UUID(), 
-         createdAt: Date? = nil, 
-         name: String, 
-         email: String? = nil, 
-         phone_number: String? = nil) {
+         fullName: String, 
+         email: String, 
+         phoneNumber: String? = nil,
+         studentId: String,
+         community: String) {
         self.id = id
-        self.createdAt = createdAt
-        self.name = name
+        self.fullName = fullName
         self.email = email
-        self.phone_number = phone_number
+        self.phoneNumber = phoneNumber
+        self.studentId = studentId
+        self.community = community
     }
     
     // MARK: - Coding Keys
     enum CodingKeys: String, CodingKey {
         case id
-        case createdAt = "created_at"
-        case name
+        case fullName = "full_name"
         case email
-        case phone_number
+        case phoneNumber = "phone_number"
+        case studentId = "student_id"
+        case community
     }
 }

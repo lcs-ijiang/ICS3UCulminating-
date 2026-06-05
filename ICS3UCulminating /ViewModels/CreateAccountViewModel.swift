@@ -17,6 +17,8 @@ class CreateAccountViewModel {
     var name: String = ""
     var email: String = ""
     var phoneNumber: String = ""
+    var studentID: String = ""
+    var community: String = "Campus Main"
     var selectedInterests: [String] = []
     
     var isLoading: Bool = false
@@ -45,10 +47,11 @@ class CreateAccountViewModel {
         let newUserID = UUID()
         let newUser = User(
             id: newUserID,
-            createdAt: Date(),
-            name: name,
+            fullName: name,
             email: email,
-            phone_number: phoneNumber.isEmpty ? nil : phoneNumber
+            phoneNumber: phoneNumber.isEmpty ? nil : phoneNumber,
+            studentId: studentID,
+            community: community
         )
         
         do {
@@ -58,7 +61,7 @@ class CreateAccountViewModel {
                 .execute()
             
             for interestName in selectedInterests {
-                let interestRecord = NewInterest(name: interestName, user_id: newUserID)
+                let interestRecord = NewInterest(tagName: interestName, userId: newUserID)
                 try await supabase
                     .from("interest")
                     .insert(interestRecord)

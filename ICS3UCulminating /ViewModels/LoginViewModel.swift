@@ -20,6 +20,8 @@ class LoginViewModel {
     var isLoading = false
     
     // MARK: - Functions
+    
+    /// This function handles the sign-in process by checking the email.
     func signIn() async {
         if email.isEmpty {
             errorMessage = "Please enter your email."
@@ -45,6 +47,20 @@ class LoginViewModel {
         } catch {
             errorMessage = "Login Error: \(error.localizedDescription)"
             isShowingError = true
+        }
+        isLoading = false
+    }
+    
+    /// Initiates Google OAuth Sign-In using Supabase SDK.
+    func signInWithGoogle() async {
+        isLoading = true
+        do {
+            // EXACT OAUTH PIPELINE REQUEST
+            try await supabase.auth.signInWithOAuth(provider: .google)
+            print("GOOGLE AUTH: Request sent successfully.")
+        } catch {
+            self.errorMessage = "Google Login Failed: \(error.localizedDescription)"
+            self.isShowingError = true
         }
         isLoading = false
     }

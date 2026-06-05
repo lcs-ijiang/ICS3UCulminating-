@@ -34,6 +34,8 @@ struct CreateAccountView: View {
                             CustomTextField(placeholder: "Full Name", text: $viewModel.name)
                             CustomTextField(placeholder: "Email Address", text: $viewModel.email)
                             CustomTextField(placeholder: "Phone (Optional)", text: $viewModel.phoneNumber)
+                            CustomTextField(placeholder: "Student ID", text: $viewModel.studentID)
+                            CustomTextField(placeholder: "Community", text: $viewModel.community)
                         }
                     }
                     

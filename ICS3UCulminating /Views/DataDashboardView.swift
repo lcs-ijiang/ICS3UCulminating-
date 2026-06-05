@@ -42,34 +42,26 @@ struct DataDashboardView: View {
                             case 0:
                                 ForEach(viewModel.users) { user in
                                     VStack(alignment: .leading) {
-                                        Text(user.name).font(.headline)
-                                        Text(user.email ?? "No email").font(.subheadline)
-                                        if let phone = user.phone_number {
-                                            Text(phone).font(.caption).foregroundColor(.secondary)
-                                        }
+                                        Text(user.fullName).font(.headline)
+                                        Text(user.email).font(.subheadline)
+                                        Text("Community: \(user.community)").font(.caption).foregroundColor(.secondary)
                                     }
                                 }
                             case 1:
                                 ForEach(viewModel.activities) { act in
                                     VStack(alignment: .leading) {
-                                        Text(act.title).font(.headline)
-                                        Text(act.description ?? "No description").font(.subheadline)
-                                        if let creatorId = act.creator_id {
-                                            Text("By: \(creatorId.uuidString.prefix(8))...")
-                                                .font(.caption2)
-                                                .monospaced()
-                                        }
+                                        Text(act.description).font(.headline)
+                                        Text("Community: \(act.community)").font(.subheadline)
+                                        Text("Participants: \(act.currentParticipants)").font(.caption2).foregroundColor(.gray)
                                     }
                                 }
                             case 2:
                                 ForEach(viewModel.interests) { inter in
                                     VStack(alignment: .leading) {
-                                        Text(inter.name)
-                                        if let userId = inter.user_id {
-                                            Text("User: \(userId.uuidString.prefix(8))...")
-                                                .font(.caption2)
-                                                .foregroundColor(.gray)
-                                        }
+                                        Text(inter.tagName)
+                                        Text("User ID: \(inter.userId.uuidString.prefix(8))...")
+                                            .font(.caption2)
+                                            .foregroundColor(.gray)
                                     }
                                 }
                             default: EmptyView()

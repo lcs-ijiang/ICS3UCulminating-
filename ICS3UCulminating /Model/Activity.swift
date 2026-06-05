@@ -7,40 +7,62 @@
 
 import Foundation
 
-/// This model represents an activity record stored in the 'activity' table on Supabase.
-/// Fix: Made properties optional to prevent "data missing" errors.
+/// Strict model for the "activity" table.
 struct Activity: Identifiable, Codable, Hashable {
     
     // MARK: - Stored properties
-    let id: Int 
-    var createdAt: Date? // Changed to Optional
-    var description: String? // Changed to Optional
-    var creator_id: UUID? // Changed to Optional
+    let id: Int64
+    var description: String
+    var date: Date
+    var community: String
+    var max: String?
+    var currentParticipants: Int64
+    var creator_id: UUID?
     
     // MARK: - Initializer
-    init(id: Int, 
-         createdAt: Date? = nil,
-         description: String? = nil, 
+    init(id: Int64, 
+         description: String, 
+         date: Date = Date(), 
+         community: String, 
+         max: String? = nil, 
+         currentParticipants: Int64 = 1,
          creator_id: UUID? = nil) {
         self.id = id
-        self.createdAt = createdAt
-  
         self.description = description
+        self.date = date
+        self.community = community
+        self.max = max
+        self.currentParticipants = currentParticipants
         self.creator_id = creator_id
     }
     
     // MARK: - Coding Keys
     enum CodingKeys: String, CodingKey {
         case id
-        case createdAt = "created_at"
-   
         case description
+        case date
+        case community
+        case max
+        case currentParticipants = "current_participants"
         case creator_id
     }
 }
 
+/// Helper for creating a new activity.
 struct NewActivity: Codable {
-
     var description: String
-    var creator_id: UUID
+    var date: Date
+    var community: String
+    var max: String?
+    var currentParticipants: Int64
+    var creator_id: UUID?
+    
+    enum CodingKeys: String, CodingKey {
+        case description
+        case date
+        case community
+        case max
+        case currentParticipants = "current_participants"
+        case creator_id
+    }
 }

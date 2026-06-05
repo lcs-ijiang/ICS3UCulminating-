@@ -22,9 +22,9 @@ class EditProfileViewModel {
     
     // MARK: - Initializer
     init(user: User) {
-        self.fullName = user.name
-        self.email = user.email ?? ""
-        self.phoneNumber = user.phone_number ?? ""
+        self.fullName = user.fullName
+        self.email = user.email
+        self.phoneNumber = user.phoneNumber ?? ""
     }
     
     // MARK: - Functions
@@ -35,10 +35,11 @@ class EditProfileViewModel {
         
         let updatedUser = User(
             id: currentUser.id,
-            createdAt: currentUser.createdAt,
-            name: fullName,
-            email: email.isEmpty ? nil : email,
-            phone_number: phoneNumber.isEmpty ? nil : phoneNumber
+            fullName: fullName,
+            email: email,
+            phoneNumber: phoneNumber.isEmpty ? nil : phoneNumber,
+            studentId: currentUser.studentId,
+            community: currentUser.community
         )
         
         do {

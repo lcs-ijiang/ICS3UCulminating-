@@ -14,21 +14,23 @@ import Supabase
 class CreateActivityViewModel {
     
     // MARK: - Stored properties
-    var title: String = ""
     var description: String = ""
+    var community: String = "Campus Main" // Default value
     var isLoading: Bool = false
     
     // MARK: - Functions
     
     /// This function saves the new activity into the Supabase database.
     func submitActivity() async {
-        guard !title.isEmpty, !description.isEmpty, let currentUser = AuthManager.shared.currentUser else { return }
+        guard !description.isEmpty, let currentUser = AuthManager.shared.currentUser else { return }
         
-        // 1. Create a NEW Activity object (without an ID, Supabase will generate one)
+        // 1. Create a NEW Activity object (without an ID, Supabase will generate the int8)
         let newActivity = NewActivity(
-            title: title,
             description: description,
-            creator_id: currentUser.id
+            date: Date(),
+            community: community,
+            max: nil, // Optional capacity
+            currentParticipants: 1
         )
         
         do {
@@ -39,10 +41,10 @@ class CreateActivityViewModel {
                 .insert(newActivity)
                 .execute()
             
-            print("Successfully posted activity to Supabase")
+            print("DATABASE: Successfully posted activity.")
             
         } catch {
-            print("Error posting activity: \(error.localizedDescription)")
+            print("DATABASE ERROR: \(error.localizedDescription)")
         }
         isLoading = false
     }

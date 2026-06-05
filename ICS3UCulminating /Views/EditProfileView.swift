@@ -51,6 +51,6 @@ struct EditProfileView: View {
 
 #Preview {
     NavigationStack {
-        EditProfileView(user: User(name: "Yishan", email: "yishan@example.com", phone_number: "123"))
+        EditProfileView(user: User(id: UUID(), fullName: "Yishan", email: "yishan@example.com", phoneNumber: "123", studentId: "001", community: "Campus"))
     }
 }

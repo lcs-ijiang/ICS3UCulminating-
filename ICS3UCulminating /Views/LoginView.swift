@@ -15,12 +15,12 @@ struct LoginView: View {
     // MARK: - Computed properties
     var body: some View {
         NavigationStack {
-            VStack(spacing: 40) {
+            VStack(spacing: 30) {
                 // 1. App Title
                 Text("CampusConnect")
                     .font(.system(size: 34, weight: .bold))
                     .foregroundColor(Color(red: 26/255, green: 35/255, blue: 126/255))
-                    .padding(.top, 60)
+                    .padding(.top, 40)
 
                 // 2. Main Login Card
                 VStack(alignment: .leading, spacing: 20) {
@@ -41,9 +41,8 @@ struct LoginView: View {
                         
                         CustomTextField(placeholder: "e.g. yishan@example.com", text: $viewModel.email)
                     }
-                    .padding(.top, 10)
 
-                    // 3. Sign In Button
+                    // Sign In Button
                     if viewModel.isLoading {
                         ProgressView()
                             .frame(maxWidth: .infinity)
@@ -51,7 +50,7 @@ struct LoginView: View {
                         Button(action: {
                             Task { await viewModel.signIn() }
                         }) {
-                            Text("Sign In")
+                            Text("Sign In with Email")
                                 .font(.headline)
                                 .foregroundColor(.white)
                                 .frame(maxWidth: .infinity)
@@ -60,33 +59,47 @@ struct LoginView: View {
                                 .cornerRadius(30)
                         }
                     }
-                    
-                    // 4. Create Account Section
-                    VStack(spacing: 20) {
-                        Text("Don't have an account?")
-                            .font(.subheadline)
-                            .foregroundColor(.gray)
-
-                        NavigationLink {
-                            CreateAccountView()
-                        } label: {
-                            Text("Create Account")
-                                .font(.headline)
-                                .foregroundColor(.blue)
-                        }
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding(.top, 10)
                 }
                 .padding(30)
                 .background(Color(white: 0.98))
                 .cornerRadius(40)
                 .padding(.horizontal, 20)
 
+                // 3. Google OAuth Pipeline Button
+                Button(action: {
+                    Task { await viewModel.signInWithGoogle() }
+                }) {
+                    HStack {
+                        Image(systemName: "globe") // Placeholder for Google icon
+                        Text("Continue with Google")
+                    }
+                    .font(.headline)
+                    .foregroundColor(.black)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(RoundedRectangle(cornerRadius: 30).stroke(Color.gray.opacity(0.3)))
+                }
+                .padding(.horizontal, 50)
+
+                // 4. Create Account Section
+                VStack(spacing: 15) {
+                    Text("Don't have an account?")
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+
+                    NavigationLink {
+                        CreateAccountView()
+                    } label: {
+                        Text("Create Account")
+                            .font(.headline)
+                            .foregroundColor(.blue)
+                    }
+                }
+                
                 Spacer()
             }
             .edgesIgnoringSafeArea(.bottom)
-            .alert("Login Error", isPresented: $viewModel.isShowingError) {
+            .alert("Authentication", isPresented: $viewModel.isShowingError) {
                 Button("OK", role: .cancel) { }
             } message: {
                 Text(viewModel.errorMessage)

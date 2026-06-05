@@ -22,12 +22,12 @@ struct PersonalInformationView: View {
                             .fill(Color.blue.opacity(0.1))
                             .frame(width: 80, height: 80)
                             .overlay(
-                                Text(user.name.prefix(1))
+                                Text(user.fullName.prefix(1))
                                     .font(.system(size: 40, weight: .bold))
                                     .foregroundColor(.blue)
                             )
                         
-                        Text(user.name)
+                        Text(user.fullName)
                             .font(.title2)
                             .fontWeight(.bold)
                         
@@ -40,7 +40,9 @@ struct PersonalInformationView: View {
                 }
                 
                 Section("Contact Details") {
-                    LabeledContent("Phone", value: user.phone_number ?? "Not provided")
+                    LabeledContent("Phone", value: user.phoneNumber ?? "Not provided")
+                    LabeledContent("Student ID", value: user.studentId)
+                    LabeledContent("Community", value: user.community)
                 }
                 
                 Section {
