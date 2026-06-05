@@ -7,12 +7,15 @@
 
 import Foundation
 import Observation
+import Supabase
 
 @Observable
+@MainActor
 class CreateActivityViewModel {
     
     // MARK: - Stored properties
     var description: String = ""
+    var requirements: String = ""
     var selectedTags: [String] = []
     var maxSlots: Int = 2
     
@@ -20,7 +23,6 @@ class CreateActivityViewModel {
     
     // MARK: - Functions
     
-    /// This function adds or removes a tag from the activity being created.
     func toggleTag(_ tag: String) {
         if let index = selectedTags.firstIndex(of: tag) {
             selectedTags.remove(at: index)
@@ -29,22 +31,32 @@ class CreateActivityViewModel {
         }
     }
     
-    /// This function saves the new activity into the shared mock data list.
-    func submitActivity() {
-        // Ensure there is a description before saving
-        guard !description.isEmpty else { return }
+    /// This function saves the new activity into the Supabase database.
+    func submitActivity() async {
+        guard !description.isEmpty, let currentUser = AuthManager.shared.currentUser else { return }
         
-        // 1. Create a new Activity object using the current user's name and the form data
+        // 1. Create a new Activity object
         let newActivity = Activity(
-            creator_id: MockDataStore.shared.currentUser.id,
-            creatorName: MockDataStore.shared.currentUser.full_name,
+            id: UUID(),
+            creator_id: currentUser.id,
+            creatorName: currentUser.full_name,
             description: description,
+            requirements: requirements,
             interest_tags: selectedTags,
             maxSlots: maxSlots
         )
         
-        // 2. Add this new activity to the global list in our MockDataStore
-        // Because MockDataStore is @Observable, all views watching this list will update instantly
-        MockDataStore.shared.activities.append(newActivity)
+        do {
+            // 2. Insert into the 'activity' table
+            try await supabase
+                .from("activity")
+                .insert(newActivity)
+                .execute()
+            
+            print("Successfully posted activity to Supabase")
+            
+        } catch {
+            print("Error posting activity: \(error.localizedDescription)")
+        }
     }
 }

@@ -55,7 +55,7 @@ struct CreateAccountView: View {
                 .padding(.horizontal)
                 
                 Button(action: {
-                    viewModel.createAccount()
+                    Task { await viewModel.createAccount() }
                 }) {
                     Text("Create Account & Sign In")
                         .font(.headline)
@@ -67,7 +67,7 @@ struct CreateAccountView: View {
                 }
                 .padding(.horizontal)
                 .padding(.top, 10)
-                .disabled(viewModel.fullName.isEmpty || viewModel.email.isEmpty || viewModel.studentID.isEmpty)
+                .disabled(viewModel.fullName.isEmpty || viewModel.email.isEmpty)
                 
                 Spacer()
             }
@@ -85,7 +85,6 @@ struct TagCloudView: View {
     let onToggle: (String) -> Void
     
     var body: some View {
-        // We'll use a LazyVGrid for simplicity in this project
         LazyVGrid(columns: [GridItem(.adaptive(minimum: 80))], spacing: 10) {
             ForEach(tags, id: \.self) { tag in
                 Text(tag)
@@ -103,7 +102,6 @@ struct TagCloudView: View {
     }
 }
 
-// Updating CreateAccountView to use TagCloudView
 #Preview {
     NavigationStack {
         CreateAccountView()

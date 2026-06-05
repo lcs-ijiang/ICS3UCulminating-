@@ -26,15 +26,11 @@ struct PlanActivityView: View {
                             
                             Spacer()
                             
-                            // Toggle next to "reason" (mapped to activityDescription label here)
                             HStack {
                                 Text("All")
                                     .font(.caption)
                                 Toggle("", isOn: $viewModel.showAllActivities)
                                     .labelsHidden()
-                                    .onChange(of: viewModel.showAllActivities) { oldValue, newValue in
-                                        // Handled by NavigationLink or explicit state if needed
-                                    }
                             }
                         }
                         .padding(.bottom, 10)
@@ -85,6 +81,9 @@ struct PlanActivityView: View {
             .navigationDestination(isPresented: $viewModel.showAllActivities) {
                 ActivitiesListView()
             }
+            .task {
+                await viewModel.fetchRecentActivities()
+            }
         }
     }
 }
@@ -95,7 +94,6 @@ struct ActivityRow: View {
     
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
-            // Avatar (using first initial of creator)
             Text(String(activity.creatorName.prefix(1)))
                 .font(.title2)
                 .fontWeight(.bold)

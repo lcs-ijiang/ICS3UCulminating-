@@ -40,20 +40,20 @@ struct LoginView: View {
                             .fontWeight(.medium)
                         
                         // Username Field
-                        CustomTextField(placeholder: "e.g. student", text: $viewModel.username)
+                        CustomTextField(placeholder: "e.g. Yishan", text: $viewModel.username)
                         
                         Text("Password")
                             .font(.subheadline)
                             .fontWeight(.medium)
                         
                         // Password Field
-                        CustomTextField(placeholder: "••••••••", text: $viewModel.password, isSecure: true)
+                        CustomTextField(placeholder: "Any password for now", text: $viewModel.password, isSecure: true)
                     }
                     .padding(.top, 10)
 
                     // 3. Sign In Button
                     Button(action: {
-                        viewModel.signIn()
+                        Task { await viewModel.signIn() }
                     }) {
                         Text("Sign In")
                             .font(.headline)

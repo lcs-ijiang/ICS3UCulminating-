@@ -19,11 +19,7 @@ class SettingsViewModel {
     
     /// This function handles the user logout process.
     func logout() {
-        // 1. Reset the current user profile back to a default "Guest" state
-        MockDataStore.shared.currentUser = User(full_name: "Guest", phone_number: "", student_id: "", interests: [])
-        
-        // 2. Flip the global authentication state back to 'loggedOut'
-        // This causes the ContentView to instantly switch back to the Login screen
-        MockDataStore.shared.authState = .loggedOut
+        // Use the shared AuthManager to clear the session
+        AuthManager.shared.logout()
     }
 }

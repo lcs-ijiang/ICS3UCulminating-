@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Supabase
 
 /// Service class to handle all Activity-related database operations.
 class ActivityService {
@@ -14,8 +15,8 @@ class ActivityService {
     
     /// Fetches all open activities from the database.
     func fetchActivities() async throws -> [Activity] {
-        let activities: [Activity] = try await SupabaseManager.shared.client
-            .from("activities")
+        let activities: [Activity] = try await supabase
+            .from("activity")
             .select()
             .execute()
             .value
@@ -28,8 +29,8 @@ class ActivityService {
     func fetchMatchingActivities(for user: User) async throws -> [Activity] {
         // The 'cs' filter in Supabase checks if an array 'contains' values
         // Here we check if any of the activity's interest_tags are in the user's interests
-        let activities: [Activity] = try await SupabaseManager.shared.client
-            .from("activities")
+        let activities: [Activity] = try await supabase
+            .from("activity")
             .select()
             .contains("interest_tags", value: user.interests)
             .eq("status", value: "Open")
@@ -42,8 +43,8 @@ class ActivityService {
     
     /// Posts a new activity to the database.
     func createActivity(_ activity: Activity) async throws {
-        try await SupabaseManager.shared.client
-            .from("activities")
+        try await supabase
+            .from("activity")
             .insert(activity)
             .execute()
     }

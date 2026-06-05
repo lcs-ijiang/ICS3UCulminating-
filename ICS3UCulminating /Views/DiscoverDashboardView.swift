@@ -74,6 +74,11 @@ struct DiscoverDashboardView: View {
                 .padding(.top, 20)
 
                 // 4. Content List
+                if viewModel.isLoading {
+                    ProgressView("Refreshing Feed...")
+                        .padding()
+                }
+                
                 List(viewModel.activities) { activity in
                     VStack(alignment: .leading, spacing: 5) {
                         Text(activity.description)
@@ -95,6 +100,9 @@ struct DiscoverDashboardView: View {
                     .padding(.vertical, 4)
                 }
                 .listStyle(.plain)
+                .refreshable {
+                    await viewModel.refreshFeed()
+                }
                 
                 // 5. Add Button
                 Button(action: {
@@ -108,11 +116,16 @@ struct DiscoverDashboardView: View {
                 }
                 .padding(.bottom, 20)
             }
-            .sheet(isPresented: $viewModel.isShowingCreateSheet) {
+            .sheet(isPresented: $viewModel.isShowingCreateSheet, onDismiss: {
+                Task { await viewModel.refreshFeed() }
+            }) {
                 CreateActivityView()
             }
             .sheet(isPresented: $viewModel.isShowingRandomMatch) {
                 RandomMatchView()
+            }
+            .task {
+                await viewModel.refreshFeed()
             }
         }
     }

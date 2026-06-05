@@ -17,7 +17,10 @@ struct RandomMatchView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 30) {
-                if let match = viewModel.currentMatch {
+                if viewModel.isLoading {
+                    ProgressView("Searching for matches...")
+                        .padding()
+                } else if let match = viewModel.currentMatch {
                     VStack(alignment: .leading, spacing: 15) {
                         Text("Recommended for You")
                             .font(.headline)
@@ -53,7 +56,7 @@ struct RandomMatchView: View {
                     .padding(.horizontal, 30)
                     
                     Button(action: {
-                        viewModel.findNextMatch()
+                        Task { await viewModel.findNextMatch() }
                     }) {
                         Label("Next Match", systemImage: "shuffle")
                             .font(.headline)
@@ -76,6 +79,11 @@ struct RandomMatchView: View {
                         
                         Text("Try adding more interests to your profile!")
                             .foregroundColor(.secondary)
+                        
+                        Button("Refresh") {
+                            Task { await viewModel.findNextMatch() }
+                        }
+                        .buttonStyle(.bordered)
                     }
                 }
                 
@@ -89,6 +97,9 @@ struct RandomMatchView: View {
                         dismiss()
                     }
                 }
+            }
+            .task {
+                await viewModel.findNextMatch()
             }
         }
     }

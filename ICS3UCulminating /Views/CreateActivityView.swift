@@ -19,7 +19,7 @@ struct CreateActivityView: View {
             Form {
                 Section("Activity Details") {
                     TextEditor(text: $viewModel.description)
-                        .frame(height: 100)
+                        .frame(height: 80)
                         .overlay(
                             Group {
                                 if viewModel.description.isEmpty {
@@ -32,6 +32,8 @@ struct CreateActivityView: View {
                             },
                             alignment: .topLeading
                         )
+                    
+                    TextField("Requirements (optional)", text: $viewModel.requirements)
                 }
                 
                 Section("Tags") {
@@ -66,8 +68,10 @@ struct CreateActivityView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Post") {
-                        viewModel.submitActivity()
-                        dismiss()
+                        Task {
+                            await viewModel.submitActivity()
+                            dismiss()
+                        }
                     }
                     .disabled(viewModel.description.isEmpty)
                 }

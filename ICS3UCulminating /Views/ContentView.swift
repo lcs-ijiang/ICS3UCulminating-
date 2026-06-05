@@ -10,12 +10,15 @@ import SwiftUI
 struct ContentView: View {
     
     // MARK: - Stored properties
-    var store = MockDataStore.shared
+    // Watching the shared AuthManager for login changes
+    var authManager = AuthManager.shared
     
     // MARK: - Computed properties
     var body: some View {
         Group {
-            switch store.authState {
+            // ROUTING LOGIC:
+            // If logged out, show Login screen. If logged in, show Dashboard.
+            switch authManager.authState {
             case .loggedOut:
                 LoginView()
             case .loggedIn:
