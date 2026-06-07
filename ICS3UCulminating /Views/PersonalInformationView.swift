@@ -31,7 +31,7 @@ struct PersonalInformationView: View {
                             .font(.title2)
                             .fontWeight(.bold)
                         
-                        Text("Email: \(user.email ?? "Not provided")")
+                        Text("Email: \(user.email)")
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                     }

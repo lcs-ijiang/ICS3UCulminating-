@@ -37,6 +37,19 @@ struct DiscoverDashboardView: View {
                     Spacer()
                     
                     NavigationLink {
+                        ActivitiesListView()
+                    } label: {
+                        Text("See All")
+                            .font(.caption)
+                            .fontWeight(.bold)
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 5)
+                            .background(Color.blue.opacity(0.1))
+                            .cornerRadius(10)
+                    }
+                    .padding(.trailing, 10)
+                    
+                    NavigationLink {
                         SettingsView()
                     } label: {
                         Image(systemName: "gearshape")

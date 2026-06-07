@@ -8,10 +8,11 @@
 import Foundation
 
 /// Strict model for the "user" table.
+/// Fix: Changed 'id' from UUID to Int64 to match potential integer primary key.
 struct User: Identifiable, Codable, Hashable {
     
     // MARK: - Stored properties
-    let id: UUID
+    let id: Int64
     var fullName: String
     var email: String
     var phoneNumber: String?
@@ -19,7 +20,7 @@ struct User: Identifiable, Codable, Hashable {
     var community: String
     
     // MARK: - Initializer
-    init(id: UUID = UUID(), 
+    init(id: Int64, 
          fullName: String, 
          email: String, 
          phoneNumber: String? = nil,
@@ -36,6 +37,23 @@ struct User: Identifiable, Codable, Hashable {
     // MARK: - Coding Keys
     enum CodingKeys: String, CodingKey {
         case id
+        case fullName = "full_name"
+        case email
+        case phoneNumber = "phone_number"
+        case studentId = "student_id"
+        case community
+    }
+}
+
+/// Helper for creating a new user.
+struct NewUser: Codable {
+    var fullName: String
+    var email: String
+    var phoneNumber: String?
+    var studentId: String
+    var community: String
+    
+    enum CodingKeys: String, CodingKey {
         case fullName = "full_name"
         case email
         case phoneNumber = "phone_number"

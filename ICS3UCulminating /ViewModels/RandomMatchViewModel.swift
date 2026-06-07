@@ -24,10 +24,11 @@ class RandomMatchViewModel {
         isLoading = true
         do {
             // 1. Fetch user's interests from the 'interest' table
+            // Fix: Converting Int64 to String for the filter to avoid compiler errors
             let userInterests: [Interest] = try await supabase
                 .from("interest")
                 .select()
-                .eq("user_id", value: currentUser.id)
+                .eq("user_id", value: String(currentUser.id))
                 .execute()
                 .value
             
@@ -44,10 +45,9 @@ class RandomMatchViewModel {
             let matches = allActivities.filter { activity in
                 let content = activity.description.lowercased()
                 let hasOverlap = interestNames.contains { interest in content.contains(interest) }
-                // Note: user table does not have creator_id, activity table does.
-                // Since user didn't specify creator_id in activity table, we'll skip the 'own post' check for now 
-                // or assume description contains it. Actually user schema HAS creator_id in activity.
-                return hasOverlap
+                // Don't match with your own post
+                let notOwnPost = activity.creator_id != currentUser.id 
+                return hasOverlap && notOwnPost
             }
             
             if !matches.isEmpty {

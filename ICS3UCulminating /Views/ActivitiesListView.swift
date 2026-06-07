@@ -13,33 +13,44 @@ struct ActivitiesListView: View {
     // MARK: - Stored properties
     @State private var activities: [Activity] = []
     @State private var isLoading = false
+    @Environment(\.dismiss) var dismiss
     
     // MARK: - Computed properties
     var body: some View {
-        Group {
-            if isLoading {
-                ProgressView("Fetching All Activities...")
-            } else {
-                List(activities) { activity in
-                    VStack(alignment: .leading) {
-                        Text(activity.description)
-                            .font(.headline)
-                        HStack {
-                            Text(activity.community)
-                            Spacer()
-                            if let max = activity.max {
-                                Text("Max: \(max)")
+        NavigationStack {
+            Group {
+                if isLoading {
+                    ProgressView("Fetching All Activities...")
+                } else {
+                    List(activities) { activity in
+                        VStack(alignment: .leading) {
+                            Text(activity.description)
+                                .font(.headline)
+                            HStack {
+                                Text(activity.community)
+                                Spacer()
+                                if let max = activity.max {
+                                    Text("Max: \(max)")
+                                }
                             }
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
                         }
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
                     }
                 }
             }
-        }
-        .navigationTitle("All Activities")
-        .task {
-            await fetchAll()
+            .navigationTitle("All Activities")
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("Return") {
+                        dismiss()
+                    }
+                    .fontWeight(.bold)
+                }
+            }
+            .task {
+                await fetchAll()
+            }
         }
     }
     
@@ -60,7 +71,5 @@ struct ActivitiesListView: View {
 }
 
 #Preview {
-    NavigationStack {
-        ActivitiesListView()
-    }
+    ActivitiesListView()
 }

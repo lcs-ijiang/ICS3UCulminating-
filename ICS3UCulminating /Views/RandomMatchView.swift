@@ -42,7 +42,7 @@ struct RandomMatchView: View {
                         Divider()
                         
                         if let creatorId = match.creator_id {
-                            Text("Creator ID: \(creatorId.uuidString.prefix(8))...")
+                            Text("Creator ID: \(String(creatorId))")
                                 .font(.caption2)
                                 .foregroundColor(.secondary)
                         }

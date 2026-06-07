@@ -40,31 +40,13 @@ struct DataDashboardView: View {
                         List {
                             switch selectedTab {
                             case 0:
-                                ForEach(viewModel.users) { user in
-                                    VStack(alignment: .leading) {
-                                        Text(user.fullName).font(.headline)
-                                        Text(user.email).font(.subheadline)
-                                        Text("Community: \(user.community)").font(.caption).foregroundColor(.secondary)
-                                    }
-                                }
+                                profileRows
                             case 1:
-                                ForEach(viewModel.activities) { act in
-                                    VStack(alignment: .leading) {
-                                        Text(act.description).font(.headline)
-                                        Text("Community: \(act.community)").font(.subheadline)
-                                        Text("Participants: \(act.currentParticipants)").font(.caption2).foregroundColor(.gray)
-                                    }
-                                }
+                                activityRows
                             case 2:
-                                ForEach(viewModel.interests) { inter in
-                                    VStack(alignment: .leading) {
-                                        Text(inter.tagName)
-                                        Text("User ID: \(inter.userId.uuidString.prefix(8))...")
-                                            .font(.caption2)
-                                            .foregroundColor(.gray)
-                                    }
-                                }
-                            default: EmptyView()
+                                interestRows
+                            default:
+                                EmptyView()
                             }
                         }
                     }
@@ -73,6 +55,39 @@ struct DataDashboardView: View {
             .navigationTitle("Live Data")
             .task {
                 await viewModel.refreshCloudData()
+            }
+        }
+    }
+    
+    private var profileRows: some View {
+        ForEach(viewModel.users) { user in
+            VStack(alignment: .leading) {
+                Text(user.fullName).font(.headline)
+                Text(user.email).font(.subheadline)
+                if let phone = user.phoneNumber {
+                    Text(phone).font(.caption).foregroundColor(.secondary)
+                }
+            }
+        }
+    }
+    
+    private var activityRows: some View {
+        ForEach(viewModel.activities) { act in
+            VStack(alignment: .leading) {
+                Text(act.description).font(.headline)
+                Text("Community: \(act.community)").font(.subheadline)
+                Text("Participants: \(act.currentParticipants)").font(.caption2).foregroundColor(.gray)
+            }
+        }
+    }
+    
+    private var interestRows: some View {
+        ForEach(viewModel.interests) { inter in
+            VStack(alignment: .leading) {
+                Text(inter.tagName)
+                Text("User ID: \(String(inter.userId))")
+                    .font(.caption2)
+                    .foregroundColor(.gray)
             }
         }
     }

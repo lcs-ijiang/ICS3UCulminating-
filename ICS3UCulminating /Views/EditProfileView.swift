@@ -21,14 +21,51 @@ struct EditProfileView: View {
     // MARK: - Computed properties
     var body: some View {
         Form {
-            Section("Personal Information") {
-                TextField("Full Name", text: $viewModel.fullName)
-                TextField("Email Address", text: $viewModel.email)
-                TextField("Phone Number", text: $viewModel.phoneNumber)
+            Section("Account Details") {
+                LabeledContent("Full Name") {
+                    TextField("Required", text: $viewModel.fullName)
+                        .multilineTextAlignment(.trailing)
+                }
+                
+                LabeledContent("Email Address") {
+                    TextField("Required", text: $viewModel.email)
+                        .multilineTextAlignment(.trailing)
+                        .autocapitalization(.none)
+                }
+                
+                LabeledContent("Phone Number") {
+                    TextField("Optional", text: $viewModel.phoneNumber)
+                        .multilineTextAlignment(.trailing)
+                }
+            }
+            
+            Section("Campus Information") {
+                LabeledContent("Student ID") {
+                    TextField("Required", text: $viewModel.studentId)
+                        .multilineTextAlignment(.trailing)
+                }
+                
+                LabeledContent("Community") {
+                    TextField("Required", text: $viewModel.community)
+                        .multilineTextAlignment(.trailing)
+                }
+            }
+            
+            Section("Your Interests") {
+                TagCloudView(
+                    tags: viewModel.availableInterests,
+                    selectedTags: viewModel.selectedInterests,
+                    onToggle: viewModel.toggleInterest
+                )
+                .padding(.vertical, 8)
             }
             
             if viewModel.isLoading {
-                ProgressView("Saving Changes...")
+                HStack {
+                    Spacer()
+                    ProgressView("Updating your profile...")
+                    Spacer()
+                }
             }
         }
         .navigationTitle("Edit Profile")
@@ -51,6 +88,6 @@ struct EditProfileView: View {
 
 #Preview {
     NavigationStack {
-        EditProfileView(user: User(id: UUID(), fullName: "Yishan", email: "yishan@example.com", phoneNumber: "123", studentId: "001", community: "Campus"))
+        EditProfileView(user: User(id: 1, fullName: "Yishan", email: "yishan@example.com", phoneNumber: "123", studentId: "2026001", community: "Campus Main"))
     }
 }

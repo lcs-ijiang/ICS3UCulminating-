@@ -44,9 +44,10 @@ class CreateAccountViewModel {
         }
         
         isLoading = true
-        let newUserID = UUID()
-        let newUser = User(
-            id: newUserID,
+        print("DATABASE: Creating account for \(name)...")
+        
+        // 1. Create a NEW User object (without ID, Supabase handles auto-increment)
+        let newUser = NewUser(
             fullName: name,
             email: email,
             phoneNumber: phoneNumber.isEmpty ? nil : phoneNumber,
@@ -55,21 +56,32 @@ class CreateAccountViewModel {
         )
         
         do {
-            try await supabase
+            // 2. Insert into the 'user' table
+            let response: User = try await supabase
                 .from("user")
                 .insert(newUser)
+                .select()
+                .single()
                 .execute()
+                .value
             
+            print("DATABASE: User record created with ID \(response.id)")
+            
+            // 3. Save interests
             for interestName in selectedInterests {
-                let interestRecord = NewInterest(tagName: interestName, userId: newUserID)
+                let interestRecord = NewInterest(tagName: interestName, userId: response.id) // userId is now Int64
                 try await supabase
                     .from("interest")
                     .insert(interestRecord)
                     .execute()
             }
             
-            AuthManager.shared.login(user: newUser)
+            // 4. Log in immediately
+            AuthManager.shared.login(user: response)
+            print("DATABASE: Signup flow complete.")
+            
         } catch {
+            print("DATABASE SIGNUP ERROR: \(error.localizedDescription)")
             self.errorMessage = "Could not create account: \(error.localizedDescription)"
             self.isShowingError = true
         }

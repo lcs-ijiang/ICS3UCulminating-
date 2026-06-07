@@ -17,7 +17,7 @@ struct Activity: Identifiable, Codable, Hashable {
     var community: String
     var max: String?
     var currentParticipants: Int64
-    var creator_id: UUID?
+    var creator_id: Int64? // Changed to Int64 to match User.id type
     
     // MARK: - Initializer
     init(id: Int64, 
@@ -26,7 +26,7 @@ struct Activity: Identifiable, Codable, Hashable {
          community: String, 
          max: String? = nil, 
          currentParticipants: Int64 = 1,
-         creator_id: UUID? = nil) {
+         creator_id: Int64? = nil) {
         self.id = id
         self.description = description
         self.date = date
@@ -55,7 +55,7 @@ struct NewActivity: Codable {
     var community: String
     var max: String?
     var currentParticipants: Int64
-    var creator_id: UUID?
+    var creator_id: Int64?
     
     enum CodingKeys: String, CodingKey {
         case description

@@ -21,43 +21,61 @@ class LoginViewModel {
     
     // MARK: - Functions
     
-    /// This function handles the sign-in process by checking the email.
+    /// This function handles the sign-in process.
     func signIn() async {
-        if email.isEmpty {
-            errorMessage = "Please enter your email."
-            isShowingError = true
+        // 1. Basic validation
+        let cleanEmail = email.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        if cleanEmail.isEmpty {
+            self.errorMessage = "Please enter your email address."
+            self.isShowingError = true
             return
         }
         
-        isLoading = true
+        self.isLoading = true
+        self.errorMessage = ""
+        print("DEBUG: Attempting login for email: \(cleanEmail)")
+        
         do {
-            let results: [User] = try await supabase
+            // 2. Query the 'user' table for a matching email
+            let response: [User] = try await supabase
                 .from("user")
                 .select()
-                .eq("email", value: email)
+                .eq("email", value: cleanEmail)
                 .execute()
                 .value
             
-            if let userRecord = results.first {
+            if let userRecord = response.first {
+                // SUCCESS: Notify the AuthManager
+                print("DEBUG: Login successful for \(userRecord.fullName)")
                 AuthManager.shared.login(user: userRecord)
             } else {
-                errorMessage = "No account found with that email."
-                isShowingError = true
+                // NO USER FOUND
+                self.errorMessage = "No account found with this email. Please create an account first."
+                self.isShowingError = true
+                print("DEBUG: No user found in database for email \(cleanEmail).")
             }
+            
+        } catch let error as DecodingError {
+            // SPECIFIC DECODING ERROR
+            self.errorMessage = "Data Format Error: The database returned an unexpected type. Check your console."
+            self.isShowingError = true
+            print("❌ DECODING ERROR during login: \(error)")
         } catch {
-            errorMessage = "Login Error: \(error.localizedDescription)"
-            isShowingError = true
+            // GENERAL NETWORK/SUPABASE ERROR
+            self.errorMessage = "Connection Error: \(error.localizedDescription)"
+            self.isShowingError = true
+            print("❌ LOGIN ERROR: \(error)")
         }
-        isLoading = false
+        
+        self.isLoading = false
     }
     
     /// Initiates Google OAuth Sign-In using Supabase SDK.
     func signInWithGoogle() async {
         isLoading = true
         do {
-            // EXACT OAUTH PIPELINE REQUEST
             try await supabase.auth.signInWithOAuth(provider: .google)
-            print("GOOGLE AUTH: Request sent successfully.")
+            print("DEBUG: Google OAuth request sent.")
         } catch {
             self.errorMessage = "Google Login Failed: \(error.localizedDescription)"
             self.isShowingError = true

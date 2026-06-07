@@ -10,22 +10,34 @@ import SwiftUI
 struct ContentView: View {
     
     // MARK: - Stored properties
-    // We observe the AuthManager. When 'authState' changes, this view body re-runs automatically.
+    // We observe the AuthManager singleton directly.
     var authManager = AuthManager.shared
     
     // MARK: - Computed properties
     var body: some View {
-        // This 'Group' acts as our main traffic controller
-        Group {
+        // We wrap in a ZStack or Group to ensure SwiftUI tracks the authState property
+        ZStack {
             if authManager.authState == .loggedIn {
-                // If logged in, show the main dashboard
-                // This replaces the entire screen so the user can't "go back" to login
+                // Main Dashboard
                 DiscoverDashboardView()
+                    .transition(.opacity)
             } else {
-                // If logged out, show the login flow (which includes signup)
+                // Login/Signup stack
                 LoginView()
+                    .transition(.opacity)
+            }
+            
+            // Global loading overlay if AuthManager is working in background
+            if authManager.isLoading {
+                Color.black.opacity(0.3)
+                    .ignoresSafeArea()
+                ProgressView("Synchronizing...")
+                    .padding()
+                    .background(Color.white)
+                    .cornerRadius(10)
             }
         }
+        .animation(.easeInOut, value: authManager.authState)
     }
 }
 

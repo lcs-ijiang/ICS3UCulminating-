@@ -26,18 +26,23 @@ let supabase = SupabaseClient(
 @Observable
 class AuthManager {
     static let shared = AuthManager()
+    
     var authState: AppAuthState = .loggedOut
     var currentUser: User?
-    private init() {}
+    var isLoading: Bool = false
+    
+    private init() { }
     
     func login(user: User) {
         self.currentUser = user
         self.authState = .loggedIn
+        print("AUTH: User logged in: \(user.fullName)")
     }
     
     func logout() {
         self.currentUser = nil
         self.authState = .loggedOut
+        print("AUTH: User logged out")
     }
 }
 
@@ -62,7 +67,7 @@ class DatabaseViewModel {
                 .select()
                 .execute()
                 .value
-            print("DATABASE: Successfully fetched users.")
+            print("FETCH SUCCESS: Got \(users.count) users from Supabase.")
         } catch let error as DecodingError {
             handleDecodingError(error, for: "user")
         } catch {
@@ -80,7 +85,7 @@ class DatabaseViewModel {
                 .select()
                 .execute()
                 .value
-            print("DATABASE: Successfully fetched activities.")
+            print("FETCH SUCCESS: Got \(activities.count) activities from Supabase.")
         } catch let error as DecodingError {
             handleDecodingError(error, for: "activity")
         } catch {
@@ -98,7 +103,7 @@ class DatabaseViewModel {
                 .select()
                 .execute()
                 .value
-            print("DATABASE: Successfully fetched interests.")
+            print("FETCH SUCCESS: Got \(interests.count) interests from Supabase.")
         } catch let error as DecodingError {
             handleDecodingError(error, for: "interest")
         } catch {
@@ -113,25 +118,16 @@ class DatabaseViewModel {
         await fetchInterests()
     }
     
-    // MARK: - Helper for Detailed DecodingError Logging
     private func handleDecodingError(_ error: DecodingError, for table: String) {
         var message = "Decoding Error in '\(table)' table: "
-        
         switch error {
-        case .typeMismatch(let type, let context):
-            message += "Type mismatch for key '\(context.codingPath.last?.stringValue ?? "unknown")'. Expected \(type)."
-        case .valueNotFound(let type, let context):
-            message += "Value not found for key '\(context.codingPath.last?.stringValue ?? "unknown")' of type \(type)."
-        case .keyNotFound(let key, _):
-            message += "Key '\(key.stringValue)' not found in database record."
-        case .dataCorrupted(let context):
-            message += "Data corrupted at '\(context.codingPath.last?.stringValue ?? "unknown")'."
-        @unknown default:
-            message += "Unknown decoding error."
+        case .typeMismatch(let type, let context): message += "Type mismatch for key '\(context.codingPath.last?.stringValue ?? "unknown")'. Expected \(type)."
+        case .valueNotFound(let type, let context): message += "Value not found for key '\(context.codingPath.last?.stringValue ?? "unknown")' of type \(type)."
+        case .keyNotFound(let key, _): message += "Key '\(key.stringValue)' not found in database record."
+        case .dataCorrupted(let context): message += "Data corrupted at '\(context.codingPath.last?.stringValue ?? "unknown")'."
+        @unknown default: message += "Unknown decoding error."
         }
-        
         self.errorMessage = message
         print("❌ \(message)")
-        print("Detailed Context: \(error)")
     }
 }
