@@ -10,34 +10,35 @@ import SwiftUI
 struct ContentView: View {
     
     // MARK: - Stored properties
-    // We observe the AuthManager singleton directly.
+    // Using @Bindable or just reading from the shared singleton
+    // Since AuthManager is @Observable, any view that reads its properties will refresh automatically.
     var authManager = AuthManager.shared
     
     // MARK: - Computed properties
     var body: some View {
-        // We wrap in a ZStack or Group to ensure SwiftUI tracks the authState property
-        ZStack {
+        Group {
             if authManager.authState == .loggedIn {
-                // Main Dashboard
+                // SUCCESS: User is logged in, show the Dashboard
                 DiscoverDashboardView()
-                    .transition(.opacity)
+                    .onAppear { print("🖥️ VIEW: Switched to Dashboard") }
             } else {
-                // Login/Signup stack
+                // Default: Show the login flow
                 LoginView()
-                    .transition(.opacity)
-            }
-            
-            // Global loading overlay if AuthManager is working in background
-            if authManager.isLoading {
-                Color.black.opacity(0.3)
-                    .ignoresSafeArea()
-                ProgressView("Synchronizing...")
-                    .padding()
-                    .background(Color.white)
-                    .cornerRadius(10)
+                    .onAppear { print("🖥️ VIEW: Showing Login screen") }
             }
         }
-        .animation(.easeInOut, value: authManager.authState)
+        .animation(.spring(), value: authManager.authState)
+        .overlay {
+            if authManager.isLoading {
+                ZStack {
+                    Color.black.opacity(0.2).ignoresSafeArea()
+                    ProgressView("Connecting to Campus...")
+                        .padding()
+                        .background(Color.white)
+                        .cornerRadius(10)
+                }
+            }
+        }
     }
 }
 

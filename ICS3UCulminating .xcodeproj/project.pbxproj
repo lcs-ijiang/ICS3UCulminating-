@@ -70,6 +70,7 @@
 		3F7425202FD300C8000B92D1 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		3F7425222FD3034B000B92D1 /* EditProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewModel.swift; sourceTree = "<group>"; };
 		3F7425242FD30352000B92D1 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
+		3F7425262FD71358000B92D1 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 		3FD4A9542FCDDC740079A8AC /* ICS3UCulminating .app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ICS3UCulminating .app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FD4A9572FCDDC740079A8AC /* ICS3UCulminating App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ICS3UCulminating App.swift"; sourceTree = "<group>"; };
 		3FD4A9592FCDDC740079A8AC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -101,6 +102,7 @@
 			children = (
 				3F74250C2FD1BAB5000B92D1 /* ActivityService.swift */,
 				3F74251E2FD2E9AF000B92D1 /* Supabase.swift */,
+				3F7425262FD71358000B92D1 /* AuthManager.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
